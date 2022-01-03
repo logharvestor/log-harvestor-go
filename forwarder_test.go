@@ -10,14 +10,41 @@ var tokenValid = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImZvcndhcmRlciJ9.e
 var interval = 30
 var testUrl = "http://localhost:3001/api/log"
 
-var defaultConfig = Config{
-	token:    "",
-	apiUrl:   "",
-	verbose:  false,
-	batch:    false,
-	interval: 10,
+var defaultConfig = NewConfig(Config{})
+
+func TestDefaultInit(t *testing.T) {
+	forwarder, e := NewForwarder(*defaultConfig)
+	if e != nil {
+		t.Error(e, forwarder)
+	}
 }
 
-func TestInit(t *testing.T) {
+func TestSendLogNoBatch(t *testing.T) {
+	conf := NewConfig(Config{token: tokenValid})
+	forwarder, e := NewForwarder(*conf)
+	if e != nil {
+		t.Error(e, forwarder)
+	}
+	success, msg := forwarder.log(Log{Lvl: "test", Msg: "{s: 1}"})
+	if !success {
+		t.Error(msg)
+	}
+	if len(forwarder.bucket) != 0 {
+		t.Errorf("Log appended to bucket while not running in BATCH - Bucket: %+v", forwarder.bucket)
+	}
+}
 
+func TestSendLogBatch(t *testing.T) {
+	conf := NewConfig(Config{token: tokenValid, batch: true})
+	forwarder, e := NewForwarder(*conf)
+	if e != nil {
+		t.Error(e, forwarder)
+	}
+	success, msg := forwarder.log(Log{Lvl: "test", Msg: "{s: 1}"})
+	if !success {
+		t.Error(msg)
+	}
+	if len(forwarder.bucket) == 0 {
+		t.Errorf("Log failed to append to bucket while running in BATCH - Bucket: %+v", forwarder.bucket)
+	}
 }

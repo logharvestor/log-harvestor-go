@@ -15,12 +15,9 @@ type Forwarder struct {
 
 /* INIT */
 func NewForwarder(c Config) (*Forwarder, error) {
-
-	var _c = Config{}
-
 	return &Forwarder{
 		id:     uuid.New(),
-		config: _c,
+		config: c,
 		bucket: []Log{},
 	}, nil
 }
@@ -36,8 +33,8 @@ func (f *Forwarder) init(c Config) Forwarder {
 /* FWDR - Send Log */
 func (f *Forwarder) log(l Log) (bool, string) {
 	fmt.Print(l)
-	f.bucket = append(f.bucket, l)
+	if f.config.batch == true {
+		f.bucket = append(f.bucket, l)
+	}
 	return true, "test"
 }
-
-/* Get Config */

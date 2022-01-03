@@ -35,9 +35,15 @@ func NewConfig(c Config) *Config {
 		conf.interval = c.interval
 	}
 	/* batch */
-	conf.batch = c.batch || Batch
+	if c.batch != Batch {
+		conf.batch = c.batch
+	}
 	/* verbose */
-	conf.verbose = c.verbose || Verbose
+	if c.verbose != Verbose {
+		conf.verbose = c.verbose || Verbose
+	}
+
+	// fmt.Printf("BatchMode: %v\n", conf.batch)
 	return conf
 }
 
