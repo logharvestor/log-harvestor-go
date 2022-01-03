@@ -1,6 +1,8 @@
 package logharvestorgo
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -37,11 +39,13 @@ func (f *Forwarder) init(c Config) Forwarder {
 	}
 }
 
-/* FWDR - Send Log */
+/* FWDR - Log */
 func (f *Forwarder) log(l Log) (bool, string) {
 	fmt.Print(l)
 	if f.config.batch == true {
 		f.bucket = append(f.bucket, l)
+	} else {
+		f.sendLog(l)
 	}
 	return true, "test"
 }
@@ -50,6 +54,31 @@ func (f *Forwarder) log(l Log) (bool, string) {
 func (f *Forwarder) testConn() (bool, string) {
 	url := f.config.apiUrl + "/check"
 	req, err := http.NewRequest("POST", url, nil)
+	req.Header = f.getHeaders()
+	if err != nil {
+		return false, err.Error()
+	}
+
+	client := &http.Client{}
+	res, err := client.Do(req)
+	body, err := ioutil.ReadAll(res.Body)
+	defer res.Body.Close()
+	if err != nil {
+		return false, err.Error()
+	}
+	// fmt.Print(string(body))
+	return true, string(body)
+}
+
+/* FWDR - Client Send Log */
+func (f *Forwarder) sendLog(l Log) (bool, string) {
+	url := f.config.apiUrl
+
+	data, err := json.Marshal(l)
+	if err != nil {
+		return false, err.Error()
+	}
+	req, err := http.NewRequest("POST", url, bytes.NewBufferString(string(data)))
 	req.Header = f.getHeaders()
 	if err != nil {
 		return false, err.Error()
