@@ -1,40 +1,60 @@
 package logharvestorgo
 
 import (
-	"fmt"
-	"strconv"
 	"testing"
+
+	"github.com/stretchr/testify/suite"
 )
 
-func FallbackError(constName string, currValue string) string {
-	return fmt.Sprintf("Fallback to constant failed for [%+v]: actual value: [%+v]", constName, currValue)
+var tokenInvalid = "123ABC"
+var tokenValid = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImZvcndhcmRlciJ9.eyJfaWQiOiI2MTI4OTIwYjNjMzQyNTAwMjFkZGQyMTciLCJpYXQiOjE2MzAwNDg3ODN9.sb8lfpp01CC-y0T9Z5XiIEdy-JBeDHSBD8Gd05bZYaQ"
+var apiUrlInvalid = "tcp://localhost:3001"
+var apiUrlValid = "http://localhost:3001"
+
+type ConfigTestSuite struct {
+	suite.Suite
+	defaultConfig Config
 }
 
-func TestDefaultConfigFallback(t *testing.T) {
-	config := NewConfig(Config{})
-	if config.apiUrl != ApiUrl {
-		t.Errorf(FallbackError("ApiUrl", config.apiUrl))
-	}
-	if config.token != Token {
-		t.Errorf(FallbackError("Token", config.token))
-	}
-	if config.batch != Batch {
-		t.Errorf(FallbackError("Batch", strconv.FormatBool(config.batch)))
-	}
-	if config.interval != Interval {
-		t.Errorf(FallbackError("Interval", strconv.Itoa(config.interval)))
-	}
-	if config.verbose != Verbose {
-		t.Errorf(FallbackError("Verbose", strconv.FormatBool(config.verbose)))
+type ConfigTableTest struct {
+	name     string
+	config   Config
+	expected bool
+}
+
+func (suite *ConfigTestSuite) Setup() {
+	suite.defaultConfig.token = Token
+	suite.defaultConfig.apiUrl = ApiUrl
+	suite.defaultConfig.batch = Batch
+	suite.defaultConfig.verbose = Verbose
+	suite.defaultConfig.interval = Interval
+}
+
+var configTableTests = []ConfigTableTest{
+	{"null token & null apiUrl", Config{token: "", apiUrl: "", interval: 0, verbose: false, batch: false}, false},
+	{"null token & invalid apiUrl", Config{token: "", apiUrl: apiUrlInvalid, interval: 0, verbose: false, batch: false}, false},
+	{"invalid token & null apiUrl", Config{token: tokenInvalid, apiUrl: "", interval: 0, verbose: false, batch: false}, false},
+	{"invalid Token & invalid apiUrl", Config{token: tokenInvalid, apiUrl: apiUrlInvalid, interval: 0, verbose: false, batch: false}, false},
+	{"Valid Token & valid apiUrl", Config{token: tokenValid, apiUrl: apiUrlValid, interval: 0, verbose: false, batch: false}, true},
+}
+
+func (suite *ConfigTestSuite) TestConfigsTable() {
+	for _, ct := range configTableTests {
+		isValid, err := ct.config.validate()
+		suite.T().Logf(`[%v]`, ct.name)
+		suite.Equalf(isValid, ct.expected, string(err))
 	}
 }
 
-func TestEmptyConfig(t *testing.T) {
+func (suite *ConfigTestSuite) TestDefaultConfigFallback() {
 	config := NewConfig(Config{})
-	isValid, e := config.validate()
-	if !isValid {
-		t.Log(e)
-	} else {
-		t.Errorf("Empty config did not throw error: %+v", config)
-	}
+	suite.True(config.token == Token)
+	suite.True(config.apiUrl == ApiUrl)
+	suite.True(config.interval == Interval)
+	suite.True(config.verbose == Verbose)
+	suite.True(config.batch == Batch)
+}
+
+func TestConfigTestSuite(t *testing.T) {
+	suite.Run(t, new(ConfigTestSuite))
 }

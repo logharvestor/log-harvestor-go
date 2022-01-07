@@ -1,9 +1,5 @@
 package logharvestorgo
 
-import (
-	"errors"
-)
-
 type Config struct {
 	token    string
 	apiUrl   string
@@ -15,8 +11,8 @@ type Config struct {
 /* NEW */
 func NewConfig(c Config) *Config {
 	conf := &Config{
-		apiUrl:   ApiUrl,
 		token:    Token,
+		apiUrl:   ApiUrl,
 		interval: Interval,
 		verbose:  Verbose,
 		batch:    Batch,
@@ -47,15 +43,15 @@ func NewConfig(c Config) *Config {
 	return conf
 }
 
-func (c *Config) validate() (bool, error) {
+func (c *Config) validate() (bool, string) {
 	/* TOKEN */
 	if c.token == "" {
-		return false, errors.New("Invalid or empty token")
+		return false, "Invalid or empty token"
 	}
 
 	/* API */
 	if c.apiUrl == "" {
-		return false, errors.New("Invalid or empty token")
+		return false, "Invalid or empty token"
 	}
-	return true, nil
+	return true, ""
 }
