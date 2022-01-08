@@ -3,68 +3,45 @@ package logharvestorgo
 import (
 	"testing"
 
-	"go.mongodb.org/mongo-driver/bson"
+	"github.com/stretchr/testify/suite"
 )
 
-/* TEST VARS */
-var tokenInvalid = "123ABC"
+/*
+	Forwarder Tests
+	* Configuration tests are covered in config_test.go
+	===============
+	- Initialization
+	- Batch Mode Channel
+	- Send Log
+	- Send Batch Logs
+*/
 
-// var tokenValid = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImZvcndhcmRlciJ9.eyJfaWQiOiI2MTI4OTIwYjNjMzQyNTAwMjFkZGQyMTciLCJpYXQiOjE2MzAwNDg3ODN9.sb8lfpp01CC-y0T9Z5XiIEdy-JBeDHSBD8Gd05bZYaQ"
-var tokenValid = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImZvcndhcmRlciJ9.eyJfaWQiOiI2MDk5Mzg5Mjg4MWQ0MzAwMjkxNzY2MGUiLCJpYXQiOjE2Mjc3MzAzOTZ9.uEY-6s8hK8HX6qy-5Su8Esb-iRXewc9hXYhRLIlALCo"
-var interval = 30
-var testUrl = "http://localhost:3001/api/log"
-
-var defaultConfig = NewConfig(Config{})
-
-func TestDefaultInit(t *testing.T) {
-	forwarder, e := NewForwarder(*defaultConfig)
-	if e != nil {
-		t.Error(e, forwarder)
-	}
+type ForwarderTestSuite struct {
+	suite.Suite
+	defaultConfig Config
+	forwarder     Forwarder
 }
 
-func TestSendLogNoBatch(t *testing.T) {
-	conf := NewConfig(Config{token: tokenValid, apiUrl: testUrl})
-	forwarder, e := NewForwarder(*conf)
-	if e != nil {
-		t.Error(e, forwarder)
-	}
-
-	success, msg := forwarder.log(Log{Type: "test", Msg: bson.M{"s": 1}})
-	if success {
-		t.Error(msg)
-	}
-	if len(forwarder.bucket) != 0 {
-		t.Errorf("Log appended to bucket while not running in BATCH - Bucket: %+v", forwarder.bucket)
-	}
+func (suite *ForwarderTestSuite) Setup() {
+	suite.defaultConfig.token = tokenValid
+	suite.defaultConfig.apiUrl = apiUrlValid
+	suite.defaultConfig.batch = false
+	suite.defaultConfig.verbose = true
+	suite.defaultConfig.interval = 30
 }
 
-// func TestSendLogBatch(t *testing.T) {
-// 	conf := NewConfig(Config{token: tokenValid,apiUrl: testUrl, batch: true})
-// 	forwarder, e := NewForwarder(*conf)
-// 	if e != nil {
-// 		t.Error(e, forwarder)
-// 	}
-// 	success, msg := forwarder.log(Log{Lvl: "test", Msg: "{s: 1}"})
-// 	if !success {
-// 		t.Error(msg)
-// 	}
-// 	if len(forwarder.bucket) == 0 {
-// 		t.Errorf("Log failed to append to bucket while running in BATCH - Bucket: %+v", forwarder.bucket)
-// 	}
-// }
+// Initialization
+func (suite *ForwarderTestSuite) TestForwarderInit() {
+	suite.forwarder = *NewForwarder(suite.defaultConfig)
+	f := NewForwarder(suite.defaultConfig)
+	// Forwarders should be uniqe
+	suite.NotEqual(suite.forwarder, f)
+	// Identical Forwarder configs should have equality
+	suite.Equal(suite.forwarder.config, f.config)
+	// Forwarders should be unique by thier ID
+	suite.NotEqual(suite.forwarder.id, f.id)
+}
 
-// func TestConn(t *testing.T) {
-// 	conf := NewConfig(Config{token: tokenValid, apiUrl: testUrl})
-// 	forwarder, e := NewForwarder(*conf)
-// 	if e != nil {
-// 		t.Error(e, forwarder)
-// 	}
-// 	success, msg := forwarder.testConn()
-
-// 	if !success {
-// 		t.Error(msg)
-// 	} else {
-// 		t.Log(msg)
-// 	}
-// }
+func TestForwarderTestSuite(t *testing.T) {
+	suite.Run(t, new(ForwarderTestSuite))
+}
