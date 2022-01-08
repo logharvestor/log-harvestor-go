@@ -35,7 +35,9 @@ var configTableTests = []ConfigTableTest{
 	{"null token & invalid apiUrl", Config{token: "", apiUrl: apiUrlInvalid, interval: 0, verbose: false, batch: false}, false},
 	{"invalid token & null apiUrl", Config{token: tokenInvalid, apiUrl: "", interval: 0, verbose: false, batch: false}, false},
 	{"invalid Token & invalid apiUrl", Config{token: tokenInvalid, apiUrl: apiUrlInvalid, interval: 0, verbose: false, batch: false}, false},
-	{"Valid Token & valid apiUrl", Config{token: tokenValid, apiUrl: apiUrlValid, interval: 0, verbose: false, batch: false}, true},
+	{"valid Token & invalid apiUrl", Config{token: tokenValid, apiUrl: apiUrlInvalid, interval: 20, verbose: false, batch: false}, false},
+	{"invalid Token & valid apiUrl", Config{token: tokenInvalid, apiUrl: apiUrlValid, interval: 20, verbose: false, batch: false}, false},
+	{"valid Token & valid apiUrl", Config{token: tokenValid, apiUrl: apiUrlValid, interval: 20, verbose: false, batch: false}, true},
 }
 
 func (suite *ConfigTestSuite) TestConfigsTable() {
