@@ -56,8 +56,11 @@ func (suite *ForwarderTestSuite) TestBatchModeInit() {
 
 // Init with Verbose mode
 func (suite *ForwarderTestSuite) TestVerboseModeInit() {
-	// Set Verbose M
-
+	// Set Verbose mode to true
+	suite.defaultConfig.verbose = true
+	fwdr := *NewForwarder(suite.defaultConfig)
+	suite.forwarder = fwdr
+	// TODO
 }
 
 // Send Log
