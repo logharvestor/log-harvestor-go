@@ -44,7 +44,7 @@ func (suite *ConfigTestSuite) TestConfigsTable() {
 	for _, ct := range configTableTests {
 		isValid, err := ct.config.validate()
 		suite.T().Logf(`[%v]`, ct.name)
-		suite.Equalf(isValid, ct.expected, string(err))
+		suite.Equalf(ct.expected, isValid, string(err))
 	}
 }
 
