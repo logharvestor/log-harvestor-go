@@ -10,8 +10,9 @@ import (
 	Forwarder Tests
 	* Configuration tests are covered in config_test.go
 	===============
-	- Initialization
-	- Batch Mode Channel
+	- Init
+	- Init with Batch mode
+	- Init with Verbose mode
 	- Send Log
 	- Send Batch Logs
 */
@@ -30,7 +31,7 @@ func (suite *ForwarderTestSuite) Setup() {
 	suite.defaultConfig.interval = 30
 }
 
-// Initialization
+// Init
 func (suite *ForwarderTestSuite) TestForwarderInit() {
 	suite.forwarder = *NewForwarder(suite.defaultConfig)
 	f := NewForwarder(suite.defaultConfig)
@@ -40,6 +41,26 @@ func (suite *ForwarderTestSuite) TestForwarderInit() {
 	suite.Equal(suite.forwarder.config, f.config)
 	// Forwarders should be unique by thier ID
 	suite.NotEqual(suite.forwarder.id, f.id)
+}
+
+// Init with Batch mode
+func (suite *ForwarderTestSuite) TestBatchModeInit() {
+
+}
+
+// Init with Verbose mode
+func (suite *ForwarderTestSuite) TestVerboseModeInit() {
+
+}
+
+// Send Log
+func (suite *ForwarderTestSuite) TestSendLog() {
+
+}
+
+// Send Batch Logs
+func (suite *ForwarderTestSuite) TestSendBatchLogs() {
+
 }
 
 func TestForwarderTestSuite(t *testing.T) {
