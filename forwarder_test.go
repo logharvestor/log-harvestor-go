@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/suite"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 /*
@@ -65,7 +66,11 @@ func (suite *ForwarderTestSuite) TestVerboseModeInit() {
 
 // Send Log
 func (suite *ForwarderTestSuite) TestSendLog() {
-
+	suite.defaultConfig.batch = false
+	suite.defaultConfig.apiUrl = ApiUrl
+	suite.forwarder = *NewForwarder(suite.defaultConfig)
+	success, msg := suite.forwarder.log(Log{Type: "test", Msg: bson.M{"s": 2}})
+	suite.Truef(success, msg)
 }
 
 // Send Batch Logs

@@ -43,8 +43,6 @@ func NewConfig(c Config) *Config {
 	if c.verbose != Verbose {
 		conf.verbose = c.verbose || Verbose
 	}
-
-	// fmt.Printf("BatchMode: %v\n", conf.batch)
 	return conf
 }
 
