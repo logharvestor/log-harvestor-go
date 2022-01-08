@@ -23,12 +23,13 @@ type ForwarderTestSuite struct {
 	forwarder     Forwarder
 }
 
-func (suite *ForwarderTestSuite) Setup() {
+// Set Default Configs
+func (suite *ForwarderTestSuite) SetupTest() {
 	suite.defaultConfig.token = tokenValid
 	suite.defaultConfig.apiUrl = apiUrlValid
 	suite.defaultConfig.batch = false
-	suite.defaultConfig.verbose = true
-	suite.defaultConfig.interval = 30
+	suite.defaultConfig.verbose = false
+	suite.defaultConfig.interval = 1
 }
 
 // Init
@@ -36,20 +37,26 @@ func (suite *ForwarderTestSuite) TestForwarderInit() {
 	suite.forwarder = *NewForwarder(suite.defaultConfig)
 	f := NewForwarder(suite.defaultConfig)
 	// Forwarders should be uniqe
-	suite.NotEqual(suite.forwarder, f)
+	suite.NotEqual(f, suite.forwarder)
 	// Identical Forwarder configs should have equality
-	suite.Equal(suite.forwarder.config, f.config)
+	suite.Equal(f.config, suite.forwarder.config)
 	// Forwarders should be unique by thier ID
-	suite.NotEqual(suite.forwarder.id, f.id)
+	suite.NotEqual(f.id, suite.forwarder.id)
 }
 
 // Init with Batch mode
 func (suite *ForwarderTestSuite) TestBatchModeInit() {
-
+	// Set Batch mode to true
+	suite.defaultConfig.batch = true
+	fwdr := *NewForwarder(suite.defaultConfig)
+	suite.forwarder = fwdr
+	// Bucket length should be equal to 0 on Init
+	suite.Equal(0, len(suite.forwarder.bucket))
 }
 
 // Init with Verbose mode
 func (suite *ForwarderTestSuite) TestVerboseModeInit() {
+	// Set Verbose M
 
 }
 
