@@ -9,7 +9,6 @@ type Config struct {
 	token    string
 	apiUrl   string
 	verbose  bool
-	batch    bool
 	interval int
 }
 
@@ -20,7 +19,6 @@ func NewConfig(c Config) *Config {
 		apiUrl:   ApiUrl,
 		interval: Interval,
 		verbose:  Verbose,
-		batch:    Batch,
 	}
 	// Fall back to default Constants (./constants.go)
 	/* url */
@@ -34,10 +32,6 @@ func NewConfig(c Config) *Config {
 	/* interval */
 	if c.interval != 0 {
 		conf.interval = c.interval
-	}
-	/* batch */
-	if c.batch != Batch {
-		conf.batch = c.batch
 	}
 	/* verbose */
 	if c.verbose != Verbose {

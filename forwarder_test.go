@@ -12,10 +12,10 @@ import (
 	* Configuration tests are covered in config_test.go
 	===============
 	- Init
-	- Init with Batch mode
 	- Init with Verbose mode
+	- Test Conn Valid
+	- Test Conn Invalid
 	- Send Log
-	- Send Batch Logs
 */
 
 type ForwarderTestSuite struct {
@@ -26,11 +26,10 @@ type ForwarderTestSuite struct {
 
 // Set Default Configs
 func (suite *ForwarderTestSuite) SetupTest() {
-	suite.defaultConfig.token = tokenValid
+	suite.defaultConfig.token = tokenValidLocal
 	suite.defaultConfig.apiUrl = apiUrlValid
-	suite.defaultConfig.batch = false
 	suite.defaultConfig.verbose = false
-	suite.defaultConfig.interval = 1
+	suite.defaultConfig.interval = 2
 }
 
 // Init
@@ -45,16 +44,6 @@ func (suite *ForwarderTestSuite) TestForwarderInit() {
 	suite.NotEqual(f.id, suite.forwarder.id)
 }
 
-// Init with Batch mode
-func (suite *ForwarderTestSuite) TestBatchModeInit() {
-	// Set Batch mode to true
-	suite.defaultConfig.batch = true
-	fwdr := *NewForwarder(suite.defaultConfig)
-	suite.forwarder = fwdr
-	// Bucket length should be equal to 0 on Init
-	suite.Equal(0, len(suite.forwarder.bucket))
-}
-
 // Init with Verbose mode
 func (suite *ForwarderTestSuite) TestVerboseModeInit() {
 	// Set Verbose mode to true
@@ -64,18 +53,32 @@ func (suite *ForwarderTestSuite) TestVerboseModeInit() {
 	// TODO
 }
 
-// Send Log
-func (suite *ForwarderTestSuite) TestSendLog() {
-	suite.defaultConfig.batch = false
-	suite.defaultConfig.apiUrl = ApiUrl
-	suite.forwarder = *NewForwarder(suite.defaultConfig)
-	success, msg := suite.forwarder.log(Log{Type: "test", Msg: bson.M{"s": 2}})
+// Test Conn - Valid
+func (suite *ForwarderTestSuite) TestConnectionValid() {
+	fwdr := *NewForwarder(suite.defaultConfig)
+	suite.forwarder = fwdr
+	success, msg := suite.forwarder.testConn()
 	suite.Truef(success, msg)
 }
 
-// Send Batch Logs
-func (suite *ForwarderTestSuite) TestSendBatchLogs() {
+// Test Conn - Invalid
+func (suite *ForwarderTestSuite) TestConnectionInvalid() {
+	suite.defaultConfig.token = suite.defaultConfig.token + "asdf"
+	fwdr := *NewForwarder(suite.defaultConfig)
+	suite.forwarder = fwdr
+	success, msg := suite.forwarder.testConn()
+	suite.Falsef(success, msg)
+}
 
+// Send Log
+func (suite *ForwarderTestSuite) TestSendLog() {
+	// Add prod url
+	suite.defaultConfig.token = tokenValidLocal
+	suite.forwarder = *NewForwarder(suite.defaultConfig)
+	// Send Test msg
+	success, msg := suite.forwarder.log(Log{Type: "test", Msg: bson.M{"s": 2}})
+	// suite.T().Log(msg)
+	suite.Truef(success, msg)
 }
 
 func TestForwarderTestSuite(t *testing.T) {

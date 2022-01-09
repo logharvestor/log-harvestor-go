@@ -8,6 +8,5 @@ const (
 	ApiUrl   = "https://app.logharvestor.com/api/log"
 	Token    = ""
 	Verbose  = false
-	Batch    = false
 	Interval = 10
 )

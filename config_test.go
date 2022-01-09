@@ -8,8 +8,9 @@ import (
 
 var tokenInvalid = "123ABC"
 var tokenValid = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImZvcndhcmRlciJ9.eyJfaWQiOiI2MTI4OTIwYjNjMzQyNTAwMjFkZGQyMTciLCJpYXQiOjE2MzAwNDg3ODN9.sb8lfpp01CC-y0T9Z5XiIEdy-JBeDHSBD8Gd05bZYaQ"
+var tokenValidLocal = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImZvcndhcmRlciJ9.eyJfaWQiOiI2MDk5Mzg5Mjg4MWQ0MzAwMjkxNzY2MGUiLCJpYXQiOjE2Mjc3MzAzOTZ9.uEY-6s8hK8HX6qy-5Su8Esb-iRXewc9hXYhRLIlALCo"
 var apiUrlInvalid = "tcp://localhost:3001"
-var apiUrlValid = "http://localhost:3001"
+var apiUrlValid = "http://localhost:3001/api/log"
 
 type ConfigTestSuite struct {
 	suite.Suite
@@ -18,26 +19,25 @@ type ConfigTestSuite struct {
 
 type ConfigTableTest struct {
 	name     string
-	config   Config
 	expected bool
+	config   Config
 }
 
 func (suite *ConfigTestSuite) Setup() {
 	suite.defaultConfig.token = Token
 	suite.defaultConfig.apiUrl = ApiUrl
-	suite.defaultConfig.batch = Batch
 	suite.defaultConfig.verbose = Verbose
 	suite.defaultConfig.interval = Interval
 }
 
 var configTableTests = []ConfigTableTest{
-	{"null token & null apiUrl", Config{token: "", apiUrl: "", interval: 0, verbose: false, batch: false}, false},
-	{"null token & invalid apiUrl", Config{token: "", apiUrl: apiUrlInvalid, interval: 0, verbose: false, batch: false}, false},
-	{"invalid token & null apiUrl", Config{token: tokenInvalid, apiUrl: "", interval: 0, verbose: false, batch: false}, false},
-	{"invalid Token & invalid apiUrl", Config{token: tokenInvalid, apiUrl: apiUrlInvalid, interval: 0, verbose: false, batch: false}, false},
-	{"valid Token & invalid apiUrl", Config{token: tokenValid, apiUrl: apiUrlInvalid, interval: 20, verbose: false, batch: false}, false},
-	{"invalid Token & valid apiUrl", Config{token: tokenInvalid, apiUrl: apiUrlValid, interval: 20, verbose: false, batch: false}, false},
-	{"valid Token & valid apiUrl", Config{token: tokenValid, apiUrl: apiUrlValid, interval: 20, verbose: false, batch: false}, true},
+	{"null token & null apiUrl", false, Config{token: "", apiUrl: "", interval: 0, verbose: false}},
+	{"null token & invalid apiUrl", false, Config{token: "", apiUrl: apiUrlInvalid, interval: 0, verbose: false}},
+	{"invalid token & null apiUrl", false, Config{token: tokenInvalid, apiUrl: "", interval: 0, verbose: false}},
+	{"invalid Token & invalid apiUrl", false, Config{token: tokenInvalid, apiUrl: apiUrlInvalid, interval: 0, verbose: false}},
+	{"valid Token & invalid apiUrl", false, Config{token: tokenValid, apiUrl: apiUrlInvalid, interval: 20, verbose: false}},
+	{"invalid Token & valid apiUrl", false, Config{token: tokenInvalid, apiUrl: apiUrlValid, interval: 20, verbose: false}},
+	{"valid Token & valid apiUrl", true, Config{token: tokenValid, apiUrl: apiUrlValid, interval: 20, verbose: false}},
 }
 
 func (suite *ConfigTestSuite) TestConfigsTable() {
@@ -54,7 +54,6 @@ func (suite *ConfigTestSuite) TestDefaultConfigFallback() {
 	suite.True(config.apiUrl == ApiUrl)
 	suite.True(config.interval == Interval)
 	suite.True(config.verbose == Verbose)
-	suite.True(config.batch == Batch)
 }
 
 func TestConfigTestSuite(t *testing.T) {

@@ -8,3 +8,4 @@ type Log struct {
 	Type string `json:"type" bson:"type"`
 	Msg  bson.M `json:"msg" bson:"msg"`
 }
+type Logs []Log
