@@ -22,7 +22,6 @@ This package is specific to `golang`. Please see our docs for other supported la
 
 ## Installation
 ______________
-
 ```console
 go get github.com/solomon-bush/log-harvestor-go
 ```
