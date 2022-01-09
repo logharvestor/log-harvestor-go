@@ -29,7 +29,6 @@ func (suite *ForwarderTestSuite) SetupTest() {
 	suite.defaultConfig.token = tokenValidLocal
 	suite.defaultConfig.apiUrl = apiUrlValid
 	suite.defaultConfig.verbose = false
-	suite.defaultConfig.interval = 2
 }
 
 // Init

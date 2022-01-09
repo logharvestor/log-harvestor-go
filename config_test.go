@@ -27,17 +27,16 @@ func (suite *ConfigTestSuite) Setup() {
 	suite.defaultConfig.token = Token
 	suite.defaultConfig.apiUrl = ApiUrl
 	suite.defaultConfig.verbose = Verbose
-	suite.defaultConfig.interval = Interval
 }
 
 var configTableTests = []ConfigTableTest{
-	{"null token & null apiUrl", false, Config{token: "", apiUrl: "", interval: 0, verbose: false}},
-	{"null token & invalid apiUrl", false, Config{token: "", apiUrl: apiUrlInvalid, interval: 0, verbose: false}},
-	{"invalid token & null apiUrl", false, Config{token: tokenInvalid, apiUrl: "", interval: 0, verbose: false}},
-	{"invalid Token & invalid apiUrl", false, Config{token: tokenInvalid, apiUrl: apiUrlInvalid, interval: 0, verbose: false}},
-	{"valid Token & invalid apiUrl", false, Config{token: tokenValid, apiUrl: apiUrlInvalid, interval: 20, verbose: false}},
-	{"invalid Token & valid apiUrl", false, Config{token: tokenInvalid, apiUrl: apiUrlValid, interval: 20, verbose: false}},
-	{"valid Token & valid apiUrl", true, Config{token: tokenValid, apiUrl: apiUrlValid, interval: 20, verbose: false}},
+	{"null token & null apiUrl", false, Config{token: "", apiUrl: "", verbose: false}},
+	{"null token & invalid apiUrl", false, Config{token: "", apiUrl: apiUrlInvalid, verbose: false}},
+	{"invalid token & null apiUrl", false, Config{token: tokenInvalid, apiUrl: "", verbose: false}},
+	{"invalid Token & invalid apiUrl", false, Config{token: tokenInvalid, apiUrl: apiUrlInvalid, verbose: false}},
+	{"valid Token & invalid apiUrl", false, Config{token: tokenValid, apiUrl: apiUrlInvalid, verbose: false}},
+	{"invalid Token & valid apiUrl", false, Config{token: tokenInvalid, apiUrl: apiUrlValid, verbose: false}},
+	{"valid Token & valid apiUrl", true, Config{token: tokenValid, apiUrl: apiUrlValid, verbose: false}},
 }
 
 func (suite *ConfigTestSuite) TestConfigsTable() {
@@ -52,7 +51,6 @@ func (suite *ConfigTestSuite) TestDefaultConfigFallback() {
 	config := NewConfig(Config{})
 	suite.True(config.token == Token)
 	suite.True(config.apiUrl == ApiUrl)
-	suite.True(config.interval == Interval)
 	suite.True(config.verbose == Verbose)
 }
 

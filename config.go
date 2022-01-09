@@ -6,19 +6,17 @@ import (
 )
 
 type Config struct {
-	token    string
-	apiUrl   string
-	verbose  bool
-	interval int
+	token   string
+	apiUrl  string
+	verbose bool
 }
 
 /* NEW */
 func NewConfig(c Config) *Config {
 	conf := &Config{
-		token:    Token,
-		apiUrl:   ApiUrl,
-		interval: Interval,
-		verbose:  Verbose,
+		token:   Token,
+		apiUrl:  ApiUrl,
+		verbose: Verbose,
 	}
 	// Fall back to default Constants (./constants.go)
 	/* url */
@@ -28,10 +26,6 @@ func NewConfig(c Config) *Config {
 	/* token */
 	if c.token != "" {
 		conf.token = c.token
-	}
-	/* interval */
-	if c.interval != 0 {
-		conf.interval = c.interval
 	}
 	/* verbose */
 	if c.verbose != Verbose {
