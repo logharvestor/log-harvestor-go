@@ -3,8 +3,10 @@ package logharvestorgo
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 
 	"github.com/google/uuid"
 )
@@ -32,7 +34,7 @@ func NewForwarder(c Config) *Forwarder {
 }
 
 // /* FWDR - Log */
-func (f *Forwarder) log(l Log) (bool, string) {
+func (f *Forwarder) Log(l Log) (bool, string) {
 	return f.sendLog(l)
 }
 
@@ -69,27 +71,33 @@ func (f *Forwarder) sendLog(l Log) (bool, string) {
 }
 
 /* FWDR - Test Conn */
-func (f *Forwarder) testConn() (bool, string) {
+func (f *Forwarder) TestConn() (bool, string) {
 	url := f.Config.ApiUrl + "/check"
 	req, err := http.NewRequest("POST", url, nil)
 	req.Header = f.getHeaders()
+	f.verboseLog(fmt.Sprintf("TestConn: %v", url))
 	if err != nil {
+		f.verboseLog(fmt.Sprintf("TestConn: Failed, ServerResponse: %v", string(req.Response.Status)))
 		return false, err.Error()
 	}
 
 	client := &http.Client{}
 	res, err := client.Do(req)
 	if err != nil {
+		f.verboseLog(fmt.Sprintf("TestConn: Failed, ServerResponse: %v", res.Status))
 		return false, err.Error()
 	}
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
+		f.verboseLog(fmt.Sprintf("TestConn: Failed, ServerResponse: %v", res.Status))
 		return false, err.Error()
 	}
 	defer res.Body.Close()
 	if res.StatusCode != 200 {
+		f.verboseLog(fmt.Sprintf("TestConn: Failed, ServerResponse: %v", res.Status))
 		return false, res.Status
 	}
+	f.verboseLog(fmt.Sprintf("TestConn: Success, ServerResponse: %v", string(body)))
 	return true, string(body)
 }
 
@@ -100,4 +108,11 @@ func (f *Forwarder) getHeaders() http.Header {
 	header.Add("Content-Type", "application/x-www-form-urlencoded")
 	header.Set("Authorization", ("Bearer " + f.Config.Token))
 	return header
+}
+
+/* UTIL -  VerboseLog */
+func (f *Forwarder) verboseLog(msg string) {
+	if f.Config.Verbose {
+		fmt.Fprintln(os.Stderr, msg)
+	}
 }

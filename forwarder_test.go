@@ -28,7 +28,7 @@ type ForwarderTestSuite struct {
 func (suite *ForwarderTestSuite) SetupTest() {
 	suite.defaultConfig.Token = TokenValid
 	suite.defaultConfig.ApiUrl = ApiUrlValid
-	suite.defaultConfig.Verbose = false
+	suite.defaultConfig.Verbose = true
 }
 
 // Init
@@ -55,7 +55,7 @@ func (suite *ForwarderTestSuite) TestVerboseModeInit() {
 func (suite *ForwarderTestSuite) TestConnectionValid() {
 	fwdr := *NewForwarder(suite.defaultConfig)
 	suite.Forwarder = fwdr
-	success, msg := suite.Forwarder.testConn()
+	success, msg := suite.Forwarder.TestConn()
 	suite.Truef(success, msg)
 }
 
@@ -64,16 +64,14 @@ func (suite *ForwarderTestSuite) TestConnectionInvalid() {
 	suite.defaultConfig.Token = suite.defaultConfig.Token + "asdf"
 	fwdr := *NewForwarder(suite.defaultConfig)
 	suite.Forwarder = fwdr
-	success, msg := suite.Forwarder.testConn()
+	success, msg := suite.Forwarder.TestConn()
 	suite.Falsef(success, msg)
 }
 
 // Send Log
 func (suite *ForwarderTestSuite) TestSendLog() {
 	suite.Forwarder = *NewForwarder(suite.defaultConfig)
-	// Send Test msg
-	success, msg := suite.Forwarder.log(Log{Type: "test", Msg: bson.M{"s": 2}})
-	// suite.T().Log(msg)
+	success, msg := suite.Forwarder.Log(Log{Type: "test", Msg: bson.M{"s": 2}})
 	suite.Truef(success, msg)
 }
 

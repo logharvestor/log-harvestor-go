@@ -34,7 +34,7 @@ func NewConfig(c Config) *Config {
 	return conf
 }
 
-func (c *Config) validate() (bool, string) {
+func (c *Config) Validate() (bool, string) {
 	/* Token */
 	if c.Token == "" {
 		return false, "Token not provided"
