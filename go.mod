@@ -1,4 +1,4 @@
-module github.com/solomon-bush/log-harvestor-go
+module github.com/logharvestor/log-harvestor-go
 
 go 1.17
 
