@@ -16,17 +16,17 @@ var headers = []string{
 
 /* FWDR */
 type Forwarder struct {
-	id            uuid.UUID
-	config        Config
-	totalLogsSent int
+	Id            uuid.UUID
+	Config        Config
+	TotalLogsSent int
 }
 
 /* INIT */
 func NewForwarder(c Config) *Forwarder {
 	f := &Forwarder{
-		id:            uuid.New(),
-		config:        c,
-		totalLogsSent: 0,
+		Id:            uuid.New(),
+		Config:        c,
+		TotalLogsSent: 0,
 	}
 	return f
 }
@@ -38,7 +38,7 @@ func (f *Forwarder) log(l Log) (bool, string) {
 
 /* FWDR - Client Send Log */
 func (f *Forwarder) sendLog(l Log) (bool, string) {
-	url := f.config.apiUrl
+	url := f.Config.ApiUrl
 
 	data, err := json.Marshal(l)
 	if err != nil {
@@ -63,14 +63,14 @@ func (f *Forwarder) sendLog(l Log) (bool, string) {
 	if res.StatusCode != 200 {
 		return false, res.Status
 	}
-	f.totalLogsSent++
+	f.TotalLogsSent++
 
 	return true, string(body)
 }
 
 /* FWDR - Test Conn */
 func (f *Forwarder) testConn() (bool, string) {
-	url := f.config.apiUrl + "/check"
+	url := f.Config.ApiUrl + "/check"
 	req, err := http.NewRequest("POST", url, nil)
 	req.Header = f.getHeaders()
 	if err != nil {
@@ -98,6 +98,6 @@ func (f *Forwarder) getHeaders() http.Header {
 	header := http.Header{}
 	header.Add("Content-Type", "application/json")
 	header.Add("Content-Type", "application/x-www-form-urlencoded")
-	header.Set("Authorization", ("Bearer " + f.config.token))
+	header.Set("Authorization", ("Bearer " + f.Config.Token))
 	return header
 }

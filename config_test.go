@@ -6,12 +6,12 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
-var tokenInvalid = "123ABC"
-var tokenValid = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImZvcndhcmRlciJ9.eyJfaWQiOiI2MTI4OTIwYjNjMzQyNTAwMjFkZGQyMTciLCJpYXQiOjE2MzAwNDg3ODN9.sb8lfpp01CC-y0T9Z5XiIEdy-JBeDHSBD8Gd05bZYaQ"
-var tokenValidLocal = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImZvcndhcmRlciJ9.eyJfaWQiOiI2MDk5Mzg5Mjg4MWQ0MzAwMjkxNzY2MGUiLCJpYXQiOjE2Mjc3MzAzOTZ9.uEY-6s8hK8HX6qy-5Su8Esb-iRXewc9hXYhRLIlALCo"
-var apiUrlInvalid = "tcp://localhost:3001"
-var apiUrlValid = ApiUrl
-var apiUrlValidLocal = "http://localhost:3001/api/log"
+var TokenInvalid = "123ABC"
+var TokenValid = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImZvcndhcmRlciJ9.eyJfaWQiOiI2MTI4OTIwYjNjMzQyNTAwMjFkZGQyMTciLCJpYXQiOjE2MzAwNDg3ODN9.sb8lfpp01CC-y0T9Z5XiIEdy-JBeDHSBD8Gd05bZYaQ"
+var TokenValidLocal = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImZvcndhcmRlciJ9.eyJfaWQiOiI2MDk5Mzg5Mjg4MWQ0MzAwMjkxNzY2MGUiLCJpYXQiOjE2Mjc3MzAzOTZ9.uEY-6s8hK8HX6qy-5Su8Esb-iRXewc9hXYhRLIlALCo"
+var ApiUrlInvalid = "tcp://localhost:3001"
+var ApiUrlValid = ApiUrl
+var ApiUrlValidLocal = "http://localhost:3001/api/log"
 
 type ConfigTestSuite struct {
 	suite.Suite
@@ -25,19 +25,19 @@ type ConfigTableTest struct {
 }
 
 func (suite *ConfigTestSuite) Setup() {
-	suite.defaultConfig.token = Token
-	suite.defaultConfig.apiUrl = ApiUrl
-	suite.defaultConfig.verbose = Verbose
+	suite.defaultConfig.Token = Token
+	suite.defaultConfig.ApiUrl = ApiUrl
+	suite.defaultConfig.Verbose = Verbose
 }
 
 var configTableTests = []ConfigTableTest{
-	{"null token & null apiUrl", false, Config{token: "", apiUrl: "", verbose: false}},
-	{"null token & invalid apiUrl", false, Config{token: "", apiUrl: apiUrlInvalid, verbose: false}},
-	{"invalid token & null apiUrl", false, Config{token: tokenInvalid, apiUrl: "", verbose: false}},
-	{"invalid Token & invalid apiUrl", false, Config{token: tokenInvalid, apiUrl: apiUrlInvalid, verbose: false}},
-	{"valid Token & invalid apiUrl", false, Config{token: tokenValid, apiUrl: apiUrlInvalid, verbose: false}},
-	{"invalid Token & valid apiUrl", false, Config{token: tokenInvalid, apiUrl: apiUrlValid, verbose: false}},
-	{"valid Token & valid apiUrl", true, Config{token: tokenValid, apiUrl: apiUrlValid, verbose: false}},
+	{"null Token & null ApiUrl", false, Config{Token: "", ApiUrl: "", Verbose: false}},
+	{"null Token & invalid ApiUrl", false, Config{Token: "", ApiUrl: ApiUrlInvalid, Verbose: false}},
+	{"invalid Token & null ApiUrl", false, Config{Token: TokenInvalid, ApiUrl: "", Verbose: false}},
+	{"invalid Token & invalid ApiUrl", false, Config{Token: TokenInvalid, ApiUrl: ApiUrlInvalid, Verbose: false}},
+	{"valid Token & invalid ApiUrl", false, Config{Token: TokenValid, ApiUrl: ApiUrlInvalid, Verbose: false}},
+	{"invalid Token & valid ApiUrl", false, Config{Token: TokenInvalid, ApiUrl: ApiUrlValid, Verbose: false}},
+	{"valid Token & valid ApiUrl", true, Config{Token: TokenValid, ApiUrl: ApiUrlValid, Verbose: false}},
 }
 
 func (suite *ConfigTestSuite) TestConfigsTable() {
@@ -50,9 +50,9 @@ func (suite *ConfigTestSuite) TestConfigsTable() {
 
 func (suite *ConfigTestSuite) TestDefaultConfigFallback() {
 	config := NewConfig(Config{})
-	suite.True(config.token == Token)
-	suite.True(config.apiUrl == ApiUrl)
-	suite.True(config.verbose == Verbose)
+	suite.True(config.Token == Token)
+	suite.True(config.ApiUrl == ApiUrl)
+	suite.True(config.Verbose == Verbose)
 }
 
 func TestConfigTestSuite(t *testing.T) {
