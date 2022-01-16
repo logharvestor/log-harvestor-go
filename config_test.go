@@ -10,7 +10,8 @@ var tokenInvalid = "123ABC"
 var tokenValid = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImZvcndhcmRlciJ9.eyJfaWQiOiI2MTI4OTIwYjNjMzQyNTAwMjFkZGQyMTciLCJpYXQiOjE2MzAwNDg3ODN9.sb8lfpp01CC-y0T9Z5XiIEdy-JBeDHSBD8Gd05bZYaQ"
 var tokenValidLocal = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImZvcndhcmRlciJ9.eyJfaWQiOiI2MDk5Mzg5Mjg4MWQ0MzAwMjkxNzY2MGUiLCJpYXQiOjE2Mjc3MzAzOTZ9.uEY-6s8hK8HX6qy-5Su8Esb-iRXewc9hXYhRLIlALCo"
 var apiUrlInvalid = "tcp://localhost:3001"
-var apiUrlValid = "http://localhost:3001/api/log"
+var apiUrlValid = ApiUrl
+var apiUrlValidLocal = "http://localhost:3001/api/log"
 
 type ConfigTestSuite struct {
 	suite.Suite

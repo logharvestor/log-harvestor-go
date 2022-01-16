@@ -26,7 +26,7 @@ type ForwarderTestSuite struct {
 
 // Set Default Configs
 func (suite *ForwarderTestSuite) SetupTest() {
-	suite.defaultConfig.token = tokenValidLocal
+	suite.defaultConfig.token = tokenValid
 	suite.defaultConfig.apiUrl = apiUrlValid
 	suite.defaultConfig.verbose = false
 }
@@ -71,8 +71,6 @@ func (suite *ForwarderTestSuite) TestConnectionInvalid() {
 
 // Send Log
 func (suite *ForwarderTestSuite) TestSendLog() {
-	// Add prod url
-	suite.defaultConfig.token = tokenValidLocal
 	suite.forwarder = *NewForwarder(suite.defaultConfig)
 	// Send Test msg
 	success, msg := suite.forwarder.log(Log{Type: "test", Msg: bson.M{"s": 2}})
