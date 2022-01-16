@@ -28,7 +28,7 @@ type ForwarderTestSuite struct {
 func (suite *ForwarderTestSuite) SetupTest() {
 	suite.defaultConfig.Token = TokenValid
 	suite.defaultConfig.ApiUrl = ApiUrlValid
-	suite.defaultConfig.Verbose = true
+	suite.defaultConfig.Verbose = false
 }
 
 // Init

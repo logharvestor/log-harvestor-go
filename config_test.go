@@ -27,11 +27,11 @@ type ConfigTableTest struct {
 func (suite *ConfigTestSuite) Setup() {
 	suite.defaultConfig.Token = Token
 	suite.defaultConfig.ApiUrl = ApiUrl
-	suite.defaultConfig.Verbose = Verbose
+	suite.defaultConfig.Verbose = false
 }
 
 var configTableTests = []ConfigTableTest{
-	{"null Token & null ApiUrl", false, Config{Token: "", ApiUrl: "", Verbose: false}},
+	{"null Token & null ApiUrl", false, *NewConfig(Config{Token: "", ApiUrl: "", Verbose: false})},
 	{"null Token & invalid ApiUrl", false, Config{Token: "", ApiUrl: ApiUrlInvalid, Verbose: false}},
 	{"invalid Token & null ApiUrl", false, Config{Token: TokenInvalid, ApiUrl: "", Verbose: false}},
 	{"invalid Token & invalid ApiUrl", false, Config{Token: TokenInvalid, ApiUrl: ApiUrlInvalid, Verbose: false}},

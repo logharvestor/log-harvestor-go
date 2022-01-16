@@ -30,6 +30,8 @@ func NewForwarder(c Config) *Forwarder {
 		Config:        c,
 		TotalLogsSent: 0,
 	}
+
+	f.verboseLog(fmt.Sprintf("New Forwarder Created: %+v", f))
 	return f
 }
 
