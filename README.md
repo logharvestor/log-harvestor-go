@@ -22,8 +22,8 @@ This package is specific to `golang`. Please see our docs for other supported la
 
 ## Installation
 ______________
-```console
-go get github.com/solomon-bush/log-harvestor-go
+```
+go get github.com/logharvestor/log-harvestor-go
 ```
 
 ## Usage
@@ -38,7 +38,7 @@ If you have not done this yet:
 Now you can use this forwarder token to send logs, by adding it to the config:
 ```Go
   pvt_token := "your_forwarder_token"
-  fwdr := *NewForwarder(Config{token: pvt_token})
+  fwdr := *NewForwarder(Config{Token: pvt_token})
 	success, msg := suite.forwarder.log(Log{Type: "test", Msg: bson.M{title: "Hello World"}}})
 ```
 ## Configuration
@@ -46,11 +46,11 @@ ___________
 
 | Option              | Default                                 | Description                                     |
 | :---                | :----                                   | :---                                            |
-| **token**           | ""                                      | The JWT token assigned to your forwarder        |
-| **apiUrl**          | https://app.logharvestor.com/log        | This should never change unless using proxies   |
-| **verbose**         | false                                   | Verbose mode prints info to the console         |
+| **Token**           | ""                                      | The JWT token assigned to your forwarder        |
+| **ApiUrl**          | https://app.logharvestor.com/log        | This should never change unless using proxies   |
+| **Verbose**         | false                                   | Verbose mode prints info to the console         |
 
-### *Note*: The `LogHarvestorGo v.1.0` mod does not support batching or compression
+### *Note*: The `LogHarvestorGo v.1.x.x` mod versions do not support batching or compression
 
 ___
 
@@ -58,7 +58,7 @@ ___
 - ### **Configuring**
 ```Go
   pvt_token := "your_forwarder_token"
-  fwdr := *NewForwarder(Config{token: pvt_token, verbose: true})
+  fwdr := *NewForwarder(Config{Token: pvt_token, Verbose: true})
 ```
 - ### **Sending Logs**
 ```Go
@@ -67,16 +67,16 @@ ___
   fwdr.log(Log{Type: "you", Msg: "GoodbyWorld"})
 
   type CustomLogMessageStruct struct{
-    treeName      string
-    family        string
-    age           int
-    heightFeet    int
+    TreeName      string
+    Family        string
+    Age           int
+    HeightFeet    int
   }
   customMsg := CustomLogMessageStruct{
-    treeType: "white pine",
-    family:   "inaceae",
-    age: 16,
-    heightFeet: 56
+    TreeType: "white pine",
+    Family:   "inaceae",
+    Age: 16,
+    HeightFeet: 56
   }
 
   fwdr.log(Log{Type: "want", Msg: bson.M{customMsg}})
