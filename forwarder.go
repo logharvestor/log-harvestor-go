@@ -43,30 +43,36 @@ func (f *Forwarder) sendLog(l Log) (bool, string) {
 	url := f.Config.ApiUrl
 
 	data, err := json.Marshal(l)
+	f.verboseLog(fmt.Sprintf("Log: %v", l))
 	if err != nil {
+		f.verboseLog(fmt.Sprintf("Log: Failed, JSONMarshall Error: %v", err.Error()))
 		return false, err.Error()
 	}
 	req, err := http.NewRequest("POST", url, bytes.NewBufferString(string(data)))
 	req.Header = f.getHeaders()
 	if err != nil {
+		f.verboseLog(fmt.Sprintf("Log: Failed, ServerResponse: %v", err.Error()))
 		return false, err.Error()
 	}
 
 	client := &http.Client{}
 	res, err := client.Do(req)
 	if err != nil {
+		f.verboseLog(fmt.Sprintf("Log: Failed, ServerResponse: %v", err.Error()))
 		return false, err.Error()
 	}
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
+		f.verboseLog(fmt.Sprintf("Log: Failed, ServerResponse: %v", err.Error()))
 		return false, err.Error()
 	}
 	defer res.Body.Close()
 	if res.StatusCode != 200 {
+		f.verboseLog(fmt.Sprintf("Log: Failed, ServerResponse: %v", res.Status))
 		return false, res.Status
 	}
 	f.TotalLogsSent++
-
+	f.verboseLog(fmt.Sprintf("Log: Success, TotalLogsSent: %v", f.TotalLogsSent))
 	return true, string(body)
 }
 
@@ -77,19 +83,19 @@ func (f *Forwarder) TestConn() (bool, string) {
 	req.Header = f.getHeaders()
 	f.verboseLog(fmt.Sprintf("TestConn: %v", url))
 	if err != nil {
-		f.verboseLog(fmt.Sprintf("TestConn: Failed, ServerResponse: %v", string(req.Response.Status)))
+		f.verboseLog(fmt.Sprintf("TestConn: Failed, ServerResponse: %v", err.Error()))
 		return false, err.Error()
 	}
 
 	client := &http.Client{}
 	res, err := client.Do(req)
 	if err != nil {
-		f.verboseLog(fmt.Sprintf("TestConn: Failed, ServerResponse: %v", res.Status))
+		f.verboseLog(fmt.Sprintf("TestConn: Failed, ServerResponse: %v", err.Error()))
 		return false, err.Error()
 	}
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		f.verboseLog(fmt.Sprintf("TestConn: Failed, ServerResponse: %v", res.Status))
+		f.verboseLog(fmt.Sprintf("TestConn: Failed, ServerResponse: %v", err.Error()))
 		return false, err.Error()
 	}
 	defer res.Body.Close()
