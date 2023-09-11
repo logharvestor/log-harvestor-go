@@ -39,7 +39,7 @@ Now you can use this forwarder token to send logs, by adding it to the config:
 ```Go
   pvt_token := "your_forwarder_token"
   fwdr := *NewForwarder(Config{Token: pvt_token})
-	success, msg := suite.forwarder.log(Log{Type: "test", Msg: bson.M{title: "Hello World"}}})
+	success, msg := suite.forwarder.log(Log{Typ: "test", Msg: bson.M{title: "Hello World"}}})
 ```
 ## Configuration
 ___________
@@ -63,8 +63,8 @@ ___
 - ### **Sending Logs**
 ```Go
   //  After config/init
-  fwdr.log(Log{Type: "whatever", Msg: bson.M{title: "Hello World"}}})
-  fwdr.log(Log{Type: "you", Msg: "GoodbyWorld"})
+  fwdr.log(Log{Typ: "whatever", Msg: bson.M{title: "Hello World"}}})
+  fwdr.log(Log{Typ: "you", Msg: "GoodbyWorld"})
 
   type CustomLogMessageStruct struct{
     TreeName      string
@@ -79,7 +79,7 @@ ___
     HeightFeet: 56
   }
 
-  fwdr.log(Log{Type: "want", Msg: bson.M{customMsg}})
+  fwdr.log(Log{Typ: "want", Msg: bson.M{customMsg}})
 ```
 
 ## Recomendations
