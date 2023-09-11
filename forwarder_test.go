@@ -77,24 +77,24 @@ func (suite *ForwarderTestSuite) TestConnectionInvalid() {
 // Send Log
 func (suite *ForwarderTestSuite) TestSendLog() {
 	suite.Forwarder = *NewForwarder(suite.defaultConfig)
-	success, msg := suite.Forwarder.Log(Log{Type: "test", Msg: bson.M{"s": 2}})
+	success, msg := suite.Forwarder.Log(Log{Typ: "test", Msg: bson.M{"s": 2}})
 	suite.Truef(success, msg)
 }
 
 var forwarderTableTests = []forwarderTableTest{
-	{"Single String", true, Log{Type: "test", Msg: "hello world!"}},
-	{"Single Number", true, Log{Type: "test", Msg: 123}},
-	{"Single Object", true, Log{Type: "test", Msg: bson.M{"a": 123, "b": "456", "c": "hello"}}},
-	{"Nested Object", true, Log{Type: "test", Msg: bson.M{"a": bson.M{"b": "123"}}}},
-	{"Nested Mixed", true, Log{Type: "test", Msg: bson.M{"a": 123, "b": bson.M{"c": "123", "d": nil}}}},
-	{"String Array", true, Log{Type: "test", Msg: bson.A{"hello", "mars", "goodbye", "world"}}},
-	{"Number Array", true, Log{Type: "test", Msg: bson.A{1, 2, 34, 567, 8, 90}}},
-	{"Object Array", true, Log{Type: "test", Msg: bson.A{bson.M{"question": "Hello?", "answer": "World!"}, bson.M{
+	{"Single String", true, Log{Typ: "test", Msg: "hello world!"}},
+	{"Single Number", true, Log{Typ: "test", Msg: 123}},
+	{"Single Object", true, Log{Typ: "test", Msg: bson.M{"a": 123, "b": "456", "c": "hello"}}},
+	{"Nested Object", true, Log{Typ: "test", Msg: bson.M{"a": bson.M{"b": "123"}}}},
+	{"Nested Mixed", true, Log{Typ: "test", Msg: bson.M{"a": 123, "b": bson.M{"c": "123", "d": nil}}}},
+	{"String Array", true, Log{Typ: "test", Msg: bson.A{"hello", "mars", "goodbye", "world"}}},
+	{"Number Array", true, Log{Typ: "test", Msg: bson.A{1, 2, 34, 567, 8, 90}}},
+	{"Object Array", true, Log{Typ: "test", Msg: bson.A{bson.M{"question": "Hello?", "answer": "World!"}, bson.M{
 		"question": "So long?", "answer": "Thanks for all the fish!"}}}},
-	{"Mixed Array", true, Log{Type: "test", Msg: bson.A{123, "abc", bson.A{1, 2, 3}, bson.M{"question": "Hello?", "answer": "World!"}, bson.M{
+	{"Mixed Array", true, Log{Typ: "test", Msg: bson.A{123, "abc", bson.A{1, 2, 3}, bson.M{"question": "Hello?", "answer": "World!"}, bson.M{
 		"question": "So long?", "answer": "Thanks for all the fish!"}}}},
-	{"Empty Msg", true, Log{Type: "test", Msg: ""}},
-	{"Nil Msg", false, Log{Type: "test", Msg: nil}},
+	{"Empty Msg", true, Log{Typ: "test", Msg: ""}},
+	{"Nil Msg", false, Log{Typ: "test", Msg: nil}},
 }
 
 func (suite *ForwarderTestSuite) TestForwardersTable() {

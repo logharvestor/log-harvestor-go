@@ -1,7 +1,7 @@
 package logharvestorgo
 
 type Log struct {
-	Type string      `json:"type" bson:"type"`
+	Typ string      `json:"typ" bson:"typ"`
 	Msg  interface{} `json:"msg" bson:"msg"`
 }
 type Logs []Log

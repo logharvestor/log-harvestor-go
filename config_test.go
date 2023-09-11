@@ -11,7 +11,7 @@ var TokenValid = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImZvcndhcmRlciJ9.e
 var TokenValidLocal = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImZvcndhcmRlciJ9.eyJfaWQiOiI2MDk5Mzg5Mjg4MWQ0MzAwMjkxNzY2MGUiLCJpYXQiOjE2Mjc3MzAzOTZ9.uEY-6s8hK8HX6qy-5Su8Esb-iRXewc9hXYhRLIlALCo"
 var ApiUrlInvalid = "tcp://localhost:3001"
 var ApiUrlValid = ApiUrl
-var ApiUrlValidLocal = "http://localhost:3001/api/log"
+var ApiUrlValidLocal = "http://localhost:4000/api/log"
 
 type ConfigTestSuite struct {
 	suite.Suite
